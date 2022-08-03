@@ -13,10 +13,10 @@ LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 class Pixel:
     def __init__(self):
-        self.color = Color(0,100,0)
+        self.color = Color(0,0,0)
 
     def setColor(self, new_color):
-        self.color = Color(255, 255, 50)
+        self.color = new_color
 
     def getColor(self):
         return self.color
@@ -60,10 +60,10 @@ def firstTest(frame, i):
         for col in range(10):
             frame.setPixel(row, col, Color(i, 0, 0))
 
-def mainLoop(frame, strip):
+def mainLoop(frame, strip, i):
     # clear all pixels
     #update('mainloop: clearning pixels..\nframe value -> ' + str(frame))
-    #colorWipe(strip, Color(255,0,0), 10)
+    #colorWipe(strip, Color(0,0,0), 10)
 
     #update('mainloop: setting pixels..')
     # set each pixel to respective frame value
@@ -71,16 +71,17 @@ def mainLoop(frame, strip):
     strip = frame.update(strip)
     #update('strip after: ' + str(strip))
     #update('mainloop: calling show..')
-    strip.setPixelColor(0, Color(255,255,0))
     # show
     strip.show()
 
     # wait
-    time.sleep(100/1000.0)
+    time.sleep(10/1000.0)
 
     #update('mainloop: "updating frame"..')
     # update frame 
     firstTest(frame, i)
+    i += 1
+    return i
 
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
@@ -155,10 +156,10 @@ if __name__ == '__main__':
     try:
 
         frame = Frame()
+        i = 1
         while True:
-            i = 10
-            mainLoop(frame, strip, i)
-            i += 1
+            i = mainLoop(frame, strip, i)
+         
 
 
     except KeyboardInterrupt:
