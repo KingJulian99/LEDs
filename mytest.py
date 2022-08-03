@@ -16,7 +16,6 @@ class Pixel:
         self.color = Color(0,100,0)
 
     def setColor(self, new_color):
-        print('setting color of pixel!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         self.color = Color(255, 255, 50)
 
     def getColor(self):
@@ -32,15 +31,15 @@ class Frame:
             self.matrix.append(row)
 
     def setPixel(self, row, col, color):
-        print('Setting pixel color inside frame..')
+        #update('Setting pixel color inside frame..')
         self.matrix[row][col].setColor(color)
-        print('New pixel value: ' + str(self.matrix[row][col].getColor()))
+        #update('New pixel value: ' + str(self.matrix[row][col].getColor()))
 
     def getPixel(self, row, col):
         return self.matrix[row][col]
     
     def update(self, strip):
-        print('frame is updating the strip')
+        #update('frame is updating the strip')
         for row in range(10):
             for col in range(10):
                 strip.setPixelColor((row*10) + col, self.matrix[row][col].getColor())
@@ -54,24 +53,24 @@ def colorWipe(strip, color, wait_ms=50):
         strip.show()
         time.sleep(wait_ms/1000.0)
 
-def firstTest(frame):
-    print('frame value -> ' + str(frame))
-    print('calling firstTest which should update pixels in frame')
+def firstTest(frame, i):
+    #update('frame value -> ' + str(frame))
+    #update('calling firstTest which should update pixels in frame')
     for row in range(10):
         for col in range(10):
-            frame.setPixel(row, col, Color(255, 0, 0))
+            frame.setPixel(row, col, Color(i, 0, 0))
 
 def mainLoop(frame, strip):
     # clear all pixels
-    print('mainloop: clearning pixels..\nframe value -> ' + str(frame))
+    #update('mainloop: clearning pixels..\nframe value -> ' + str(frame))
     #colorWipe(strip, Color(255,0,0), 10)
 
-    print('mainloop: setting pixels..')
+    #update('mainloop: setting pixels..')
     # set each pixel to respective frame value
-    print('strip before: ' + str(strip))
+    #update('strip before: ' + str(strip))
     strip = frame.update(strip)
-    print('strip after: ' + str(strip))
-    print('mainloop: calling show..')
+    #update('strip after: ' + str(strip))
+    #update('mainloop: calling show..')
     strip.setPixelColor(0, Color(255,255,0))
     # show
     strip.show()
@@ -79,9 +78,9 @@ def mainLoop(frame, strip):
     # wait
     time.sleep(100/1000.0)
 
-    print('mainloop: "updating frame"..')
+    #update('mainloop: "updating frame"..')
     # update frame 
-    firstTest(frame)
+    firstTest(frame, i)
 
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
@@ -157,7 +156,9 @@ if __name__ == '__main__':
 
         frame = Frame()
         while True:
-            mainLoop(frame, strip)
+            i = 10
+            mainLoop(frame, strip, i)
+            i += 1
 
 
     except KeyboardInterrupt:
