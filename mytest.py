@@ -13,11 +13,11 @@ LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 class Pixel:
     def __init__(self):
-        self.color = Color(0,0,0)
+        self.color = Color(0,100,0)
 
     def setColor(self, new_color):
-        print('setting color of pixel!')
-        self.color = new_color
+        print('setting color of pixel!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        self.color = Color(255, 255, 50)
 
     def getColor(self):
         return self.color
@@ -155,8 +155,8 @@ if __name__ == '__main__':
 
     try:
 
+        frame = Frame()
         while True:
-            frame = Frame()
             mainLoop(frame, strip)
 
 
