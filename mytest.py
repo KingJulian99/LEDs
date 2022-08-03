@@ -16,14 +16,14 @@ class Pixel:
         self.color = Color(0,0,0)
 
     def setColor(self, new_color):
+        print('setting color of pixel!')
         self.color = new_color
 
     def getColor(self):
         return self.color
 
 class Frame:
-    def __init__(self, strip):
-        self.strip = strip
+    def __init__(self):
         self.matrix = []
         for row in range(10):
             row = []
@@ -32,16 +32,19 @@ class Frame:
             self.matrix.append(row)
 
     def setPixel(self, row, col, color):
+        print('Setting pixel color inside frame..')
         self.matrix[row][col].setColor(color)
+        print('New pixel value: ' + str(self.matrix[row][col].getColor()))
 
     def getPixel(self, row, col):
         return self.matrix[row][col]
     
-    def update(self):
+    def update(self, strip):
+        print('frame is updating the strip')
         for row in range(10):
             for col in range(10):
-                strip.setPixelColor((row*10) + col, self.getPixel(row, col).getColor())
-
+                strip.setPixelColor((row*10) + col, self.matrix[row][col].getColor())
+        return strip
 
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=50):
@@ -52,20 +55,24 @@ def colorWipe(strip, color, wait_ms=50):
         time.sleep(wait_ms/1000.0)
 
 def firstTest(frame):
+    print('frame value -> ' + str(frame))
+    print('calling firstTest which should update pixels in frame')
     for row in range(10):
         for col in range(10):
-            frame.setPixel(row, col, Color(255, 0, 255))
+            frame.setPixel(row, col, Color(255, 0, 0))
 
 def mainLoop(frame, strip):
     # clear all pixels
-    print('mainloop: clearning pixels..')
-    colorWipe(strip, Color(0,0,0), 10)
+    print('mainloop: clearning pixels..\nframe value -> ' + str(frame))
+    #colorWipe(strip, Color(255,0,0), 10)
 
     print('mainloop: setting pixels..')
     # set each pixel to respective frame value
-    frame.update()
-    
+    print('strip before: ' + str(strip))
+    strip = frame.update(strip)
+    print('strip after: ' + str(strip))
     print('mainloop: calling show..')
+    strip.setPixelColor(0, Color(255,255,0))
     # show
     strip.show()
 
@@ -149,7 +156,7 @@ if __name__ == '__main__':
     try:
 
         while True:
-            frame = Frame(strip)
+            frame = Frame()
             mainLoop(frame, strip)
 
 
