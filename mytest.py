@@ -1,15 +1,7 @@
-#!/usr/bin/env python3
-# rpi_ws281x library strandtest example
-# Author: Tony DiCola (tony@tonydicola.com)
-#
-# Direct port of the Arduino NeoPixel library strandtest example.  Showcases
-# various animations on a strip of NeoPixels.
-
 import time
 from rpi_ws281x import *
 import argparse
 
-# LED strip configuration:
 LED_COUNT      = 100      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
@@ -19,6 +11,36 @@ LED_BRIGHTNESS = 10     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+class Pixel:
+    def __init__(self):
+        self.color = Color(0,0,0)
+
+    def setColor(self, new_color):
+        self.color = new_color
+
+    def getColor(self):
+        return self.color
+
+class Frame:
+    def __init__(self, strip):
+        self.strip = strip
+        self.matrix = []
+        for row in range(10):
+            row = []
+            for col in range(10):
+                row.append(Pixel())
+            self.matrix.append(row)
+
+    def setPixel(self, row, col, color):
+        self.matrix[row][col].setColor(color)
+
+    def getPixel(self, row, col):
+        return self.matrix[row][col]
+    
+    def update(self):
+        for row in range(10):
+            for col in range(10):
+                strip.setPixelColor((row*10) + col, self.getPixel(row, col).getColor())
 
 
 # Define functions which animate LEDs in various ways.
@@ -28,6 +50,32 @@ def colorWipe(strip, color, wait_ms=50):
         strip.setPixelColor(i, color)
         strip.show()
         time.sleep(wait_ms/1000.0)
+
+def firstTest(frame):
+    for row in range(10):
+        for col in range(10):
+            frame.setPixel(row, col, Color(255, 0, 255))
+
+def mainLoop(frame, strip):
+    # clear all pixels
+    print('mainloop: clearning pixels..')
+    colorWipe(strip, Color(0,0,0), 10)
+
+    print('mainloop: setting pixels..')
+    # set each pixel to respective frame value
+    frame.update()
+    
+    print('mainloop: calling show..')
+    # show
+    strip.show()
+
+    # wait
+    time.sleep(100/1000.0)
+
+    print('mainloop: "updating frame"..')
+    # update frame 
+    firstTest(frame)
+
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
     """Movie theater light style chaser animation."""
@@ -84,16 +132,14 @@ def test(strip):
         strip.setPixelColor(1+i, Color(255,255,0))
         strip.show()
         time.sleep(100/1000.0)
-# Main program logic follows:
+
+
 if __name__ == '__main__':
-    # Process arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
 
-    # Create NeoPixel object with appropriate configuration.
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-    # Intialize the library (must be called once before other functions).
     strip.begin()
 
     print ('Press Ctrl-C to quit.')
@@ -103,19 +149,9 @@ if __name__ == '__main__':
     try:
 
         while True:
-            test(strip)
-#            print ('Color wipe animations.')
-#            colorWipe(strip, Color(127, 127, 127))  # Red wipe
-#            colorWipe(strip, Color(0, 255, 0))  # Blue wipe
-#            colorWipe(strip, Color(0, 0, 255))  # Green wipe
-#            print ('Theater chase animations.')
-#            theaterChase(strip, Color(127, 127, 127))  # White theater chase
-#            theaterChase(strip, Color(127,   0,   0))  # Red theater chase
-#            theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
-#            print ('Rainbow animations.')
-#            rainbow(strip)
-#            rainbowCycle(strip)
-#            theaterChaseRainbow(strip)
+            frame = Frame(strip)
+            mainLoop(frame, strip)
+
 
     except KeyboardInterrupt:
         if args.clear:
