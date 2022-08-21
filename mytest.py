@@ -83,7 +83,7 @@ def mainLoop(frame, strip, i):
 
     strip.show()
 
-    showImage(frame, 'tree.png')
+    showImage(frame, 'debug.png')
 
     #firstTest(frame, i)
 
