@@ -77,7 +77,7 @@ def mainLoop(frame, strip, i):
     #update('mainloop: "updating frame"..')
     # update frame 
     firstTest(frame, i)
-    i += 0.1
+    i += 1
 
     return i
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
             if(i > 255):
                 i = 0
             i = mainLoop(frame, strip, i)
-            time.sleep(0.5)
+            time.sleep(0.1)
          
 
 
