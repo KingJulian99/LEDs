@@ -90,7 +90,7 @@ def mainLoop(frame, strip, i):
     #colorWipe(strip, Color(0,0,0), 10)
 
     while True:
-        showGif(frame, strip, 'fire2', 0.3)
+        showGif(frame, strip, 'fire2', 0.1)
 
     #firstTest(frame, i)
 
