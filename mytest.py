@@ -1,6 +1,7 @@
 import time
 from rpi_ws281x import *
 import argparse
+from PIL import Image
 
 LED_COUNT      = 100      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
@@ -60,26 +61,31 @@ def firstTest(frame, i):
         for col in range(10):
             frame.setPixel(row, col, Color(i, 0, 0))
 
+def showImage(frame, image_name):
+    print('showimage called')
+
+    img = Image.open(f'images/{image_name}')
+    img = img.convert('RGB')
+
+    for row in range(10):
+        for col in range(10):
+            # get the RGB values of the current pixel
+            r, g, b = img.getpixel((row, col))
+            frame.setPixel(row, col, Color(r, g, b))
+
+
 def mainLoop(frame, strip, i):
     # clear all pixels
     #update('mainloop: clearning pixels..\nframe value -> ' + str(frame))
     #colorWipe(strip, Color(0,0,0), 10)
 
-    #update('mainloop: setting pixels..')
-    # set each pixel to respective frame value
-    #update('strip before: ' + str(strip))
     strip = frame.update(strip)
-    #update('strip after: ' + str(strip))
-    #update('mainloop: calling show..')
-    # show
+
     strip.show()
 
-    #update('mainloop: "updating frame"..')
-    # update frame 
-    firstTest(frame, i)
-    i += 1
+    showImage(frame, 'watermelon.png')
 
-    return i
+    #firstTest(frame, i)
 
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
@@ -156,11 +162,9 @@ if __name__ == '__main__':
         i = 1
 
         while True:
-            print(f'i = {i}')
-            if(i > 255):
-                i = 0
-            i = mainLoop(frame, strip, i)
-            time.sleep(0.1)
+        
+            mainLoop(frame, strip, i)
+            time.sleep(5)
          
 
 
