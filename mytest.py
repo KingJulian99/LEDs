@@ -155,8 +155,9 @@ if __name__ == '__main__':
 
         frame = Frame()
         i = 1
-        
+
         while True:
+            print(f'i = {i}')
             i = mainLoop(frame, strip, i)
             time.sleep(10/1000.0)
          
