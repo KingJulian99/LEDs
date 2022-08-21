@@ -2,6 +2,7 @@ import time
 from rpi_ws281x import *
 import argparse
 from PIL import Image
+import os
 
 LED_COUNT      = 100      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
@@ -61,7 +62,7 @@ def firstTest(frame, i):
         for col in range(10):
             frame.setPixel(row, col, Color(i, 0, 0))
 
-def showImage(frame, image_path):
+def showImage(frame, strip, image_path):
     print('showimage called')
 
     img = Image.open(f'{image_path}')
@@ -76,11 +77,11 @@ def showImage(frame, image_path):
     strip = frame.update(strip)
     strip.show()
 
-def showGif(frame, foldername, interval):
+def showGif(frame, strip, foldername, interval):
     n_files = len([name for name in os.listdir(f'gifs/{foldername}') if os.path.isfile(f'gifs/{foldername}/{name}')])
 
     for i in range(n_files):
-        showImage(frame, f'gifs/{foldername}/{i}.png')
+        showImage(frame, strip, f'gifs/{foldername}/{i}.png')
         time.sleep(interval)
 
 def mainLoop(frame, strip, i):
@@ -89,7 +90,7 @@ def mainLoop(frame, strip, i):
     #colorWipe(strip, Color(0,0,0), 10)
 
     while True:
-        showGif(frame, 'fire', 0.3)
+        showGif(frame, strip, 'fire', 0.3)
 
     #firstTest(frame, i)
 
