@@ -74,13 +74,11 @@ def mainLoop(frame, strip, i):
     # show
     strip.show()
 
-    # wait
-    time.sleep(10/1000.0)
-
     #update('mainloop: "updating frame"..')
     # update frame 
     firstTest(frame, i)
     i += 1
+
     return i
 
 
@@ -157,8 +155,10 @@ if __name__ == '__main__':
 
         frame = Frame()
         i = 1
+        
         while True:
             i = mainLoop(frame, strip, i)
+            time.sleep(10/1000.0)
          
 
 
