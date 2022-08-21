@@ -136,7 +136,7 @@ def test(strip):
         strip.setPixelColor(i, Color(0,0,0))
         strip.setPixelColor(1+i, Color(255,255,0))
         strip.show()
-        time.sleep(100/1000.0)
+        time.sleep(0.5)
 
 
 if __name__ == '__main__':
@@ -158,6 +158,8 @@ if __name__ == '__main__':
 
         while True:
             print(f'i = {i}')
+            if(i > 255):
+                i = 0
             i = mainLoop(frame, strip, i)
             time.sleep(10/1000.0)
          
