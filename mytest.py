@@ -61,29 +61,35 @@ def firstTest(frame, i):
         for col in range(10):
             frame.setPixel(row, col, Color(i, 0, 0))
 
-def showImage(frame, image_name):
+def showImage(frame, image_path):
     print('showimage called')
 
-    img = Image.open(f'images/{image_name}')
+    img = Image.open(f'{image_path}')
     img = img.convert('RGB')
 
     for row in range(10):
         for col in range(10):
             # get the RGB values of the current pixel
-            r, g, b = img.getpixel((row, col))
+            r, g, b = img.getpixel((col, row))
             frame.setPixel(row, col, Color(r, g, b))
 
+    strip = frame.update(strip)
+    strip.show()
+
+def showGif(frame, foldername, interval):
+    n_files = len([name for name in os.listdir(f'gifs/{foldername}') if os.path.isfile(f'gifs/{foldername}/{name}')])
+
+    for i in range(n_files):
+        showImage(frame, f'gifs/{foldername}/{i}.png')
+        time.sleep(interval)
 
 def mainLoop(frame, strip, i):
     # clear all pixels
     #update('mainloop: clearning pixels..\nframe value -> ' + str(frame))
     #colorWipe(strip, Color(0,0,0), 10)
 
-    strip = frame.update(strip)
-
-    strip.show()
-
-    showImage(frame, 'debug.png')
+    while True:
+        showGif(frame, 'fire', 0.3)
 
     #firstTest(frame, i)
 
@@ -164,7 +170,8 @@ if __name__ == '__main__':
         while True:
         
             mainLoop(frame, strip, i)
-            time.sleep(5)
+            
+            break
          
 
 
