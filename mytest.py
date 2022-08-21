@@ -77,7 +77,7 @@ def mainLoop(frame, strip, i):
     #update('mainloop: "updating frame"..')
     # update frame 
     firstTest(frame, i)
-    i += 1
+    i += 0.1
 
     return i
 
